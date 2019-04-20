@@ -1,0 +1,6 @@
+Our project is a card game called "Dhaglabaaji" which can be translated to card stacking.
+It can be played with 2 or more players but in our version of the game, it will be played by 4 players. 
+The cards will be dealt to all 4 players so that they each will have 13 cards. 
+One at a time players will start stacking cards in the middle and if the card that you put in middle is of a same type, 
+then all the cards in middle will go to the player that had a match with the top card in the middle. 
+This will be repeated until one player runs out of cards. Then, the score will be calculated.
