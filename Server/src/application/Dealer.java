@@ -25,6 +25,8 @@ public class Dealer extends Thread {
 	ArrayList<playerThread> playerList = new ArrayList<playerThread>();
 	Consumer<Serializable> callback;
 	
+	ArrayList<Card> middleStack = new ArrayList<Card>();
+	
 	Dealer(int port, Consumer<Serializable> callback) {
 		this.port = port;
 		this.callback = callback;
@@ -121,8 +123,11 @@ public class Dealer extends Thread {
 		
 		public void run() {
 			try(ServerSocket server = new ServerSocket(port)) {
-				while(true) {
-					playerThread p = new playerThread(server.accept());
+				
+				System.out.println("here..1..in server");
+				for(int i = 0; i < 4; i++) {
+					System.out.println("here..1..in server");
+					playerThread p = new playerThread(server.accept(),i+1);
 					playerList.add(p);
 					p.start();
 				}
@@ -145,18 +150,28 @@ public class Dealer extends Thread {
 		Socket socket;
 		ObjectOutputStream out;
 		ObjectInputStream in;
-		
-		playerThread( Socket socket){
+		int playerNum;
+		playerThread( Socket socket,int playerNum){
+			
 			this.socket = socket;
+			this.playerNum = playerNum;
 		}
 		
 		public void run() {
 			try(ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
 					ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
 				
+				socket.setTcpNoDelay(true);
 				this.out = out;
 				this.in = in;
 				
+				System.out.println("here..2..in server");
+				callback.accept("Player " + playerNum + " is connected!");
+				out.writeObject("You are now connected!");
+				System.out.println("here..3..in server");
+				out.writeObject((Serializable) "-pn");
+				out.writeObject((Serializable)playerNum);
+				System.out.println("here..5..in server");
 				while(true) {
 					Serializable data = (Serializable) in.readObject();
 					callback.accept(data);

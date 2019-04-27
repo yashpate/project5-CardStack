@@ -7,6 +7,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
+import javafx.application.Platform;
+
 public class Player {
 	int playerNum;
 	int port;
@@ -19,9 +21,12 @@ public class Player {
 	Player(int port, String ip,Consumer<Serializable> callback){
 		this.port = port;
 		this.ip = ip;
+		
 		this.callback = callback;
 		player = new playerThread();
+		System.out.println("here in1 client" + port + "  " + ip);
 		player.start();
+		System.out.println("here in2 client");
 	}
 	
 	
@@ -36,13 +41,21 @@ public class Player {
 					ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
 					ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
 				
+				socket.setTcpNoDelay(true);
+				this.socket = socket;
 				this.out = out;
 				this.in = in;
 				
-				
+				System.out.println("here in client");
 				while(true) {
 					Serializable data = (Serializable) in.readObject();
-					callback.accept(data);
+					if(data.toString().equals("-pn")) {
+						System.out.println("here in if client");
+						Serializable data1 = (Serializable) in.readObject();
+						Platform.runLater(() -> { PlayerFX.mainStage.setTitle("Player " + data1.toString()); });
+					}else {
+						callback.accept(data);
+					}
 				}
 				
 			}catch(Exception e) {

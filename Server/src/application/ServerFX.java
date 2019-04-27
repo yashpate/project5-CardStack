@@ -58,9 +58,9 @@ public class ServerFX extends Application {
 			TextField portField = new TextField("5555");
 			HBox hb = new HBox(10,portField,startButton,quitButton);
 			
-			startButton.setOnAction(e->{ServerSideWindow(primaryStage);
+			startButton.setOnAction(e->{port = Integer.parseInt(portField.getText());
 										dealer = createDealer();
-										port = Integer.parseInt(portField.getText());});
+										ServerSideWindow(primaryStage);});
 			
 			hb.setAlignment(Pos.CENTER);
 			

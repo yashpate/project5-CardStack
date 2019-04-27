@@ -24,9 +24,12 @@ public class PlayerFX extends Application {
 	
 	TextField messages = new TextField();
 	
+	static Stage mainStage;
+	
 	@Override
 	public void start(Stage primaryStage) {
 		try {
+			mainStage = primaryStage;
 			BorderPane root = new BorderPane();
 			
 			Text welcome = new Text("Welcome to CardStack Game!");
@@ -43,15 +46,15 @@ public class PlayerFX extends Application {
 			Button startButton = new Button("Start Game");
 			Button quitButton = new Button("Quit Game");
 			
-			quitButton.setOnAction(e->primaryStage.close());
+			quitButton.setOnAction(e->mainStage.close());
 			
 			TextField portField = new TextField("5555");
 			TextField ipField = new TextField("127.0.0.1");
 			HBox hb = new HBox(10,portField,ipField,startButton,quitButton);
 			
-			startButton.setOnAction(e->{p = createPlayer();
-										port = Integer.parseInt(portField.getText());
-										ip = ipField.getText();});
+			startButton.setOnAction(e->{port = Integer.parseInt(portField.getText());
+										ip = ipField.getText();
+										p = createPlayer();});
 			
 			hb.setAlignment(Pos.CENTER);
 			
@@ -63,14 +66,14 @@ public class PlayerFX extends Application {
 			
 			Scene scene = new Scene(root,500,200);
 			
-			primaryStage.setScene(scene);
-			primaryStage.show();
+			mainStage.setScene(scene);
+			mainStage.show();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	private void ClientSideWindow(Stage primaryStage) {
+	private void ClientSideWindow() {
 		// TODO Auto-generated method stub
 		
 	}
