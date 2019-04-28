@@ -9,6 +9,7 @@ import javafx.geometry.Pos;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -24,7 +25,7 @@ public class ServerFX extends Application {
 	Dealer dealer;
 	Consumer<Serializable> callback;
 	
-	TextField messages = new TextField();
+	TextArea messages = new TextArea();
 	
 	int totalCard1=0;
 	int totalCard2=0;
@@ -37,7 +38,6 @@ public class ServerFX extends Application {
 			
 			BorderPane root = new BorderPane();
 			
-			root.autosize();
 			
 			Text welcome = new Text("Welcome to CardStack Game Server!");
 			welcome.setFill(Color.DARKRED);
@@ -98,8 +98,8 @@ public class ServerFX extends Application {
 		
 		Button stopButton = new Button("Stop Game");
 		stopButton.setOnAction(e->primaryStage.close());
-		
-		messages.setMinSize(200, 50);
+	
+	
 		VBox center = new VBox(10,messages,stopButton);
 		center.setAlignment(Pos.CENTER);
 		

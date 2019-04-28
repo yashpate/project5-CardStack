@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.function.Consumer;
 
 import javafx.scene.image.Image;
@@ -131,8 +132,53 @@ public class Dealer extends Thread {
 					playerList.add(p);
 					p.start();
 				}
+				
 			}catch(Exception e) {
 				callback.accept("Server Thread Closed!");
+			}
+		}
+	}
+	
+	public void startGameWindow() {
+		for(int i = 0; i < 4; i++) {
+			try {
+				playerList.get(i).out.writeObject("-sgw");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public Card getCard() {
+		Random rand = new Random();
+		
+        int x = rand.nextInt(numCards);
+
+        Card c = deck.get(x);
+        deck.remove(x);
+        numCards--;
+        return c;
+	}
+	
+	public ArrayList<Card> getHand(){
+		ArrayList<Card> hand = new ArrayList<Card>();
+		
+		for(int i = 0; i < 13; i++) {
+			hand.add(getCard());
+		}
+	
+		return hand;	
+	}
+	
+	public void dealHand() {
+		for(int i = 0; i < 4; i++) {
+			try {
+				playerList.get(i).out.writeObject("-gh");
+				playerList.get(i).out.writeObject((Serializable) getHand());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 	}
@@ -165,13 +211,22 @@ public class Dealer extends Thread {
 				this.out = out;
 				this.in = in;
 				
-				System.out.println("here..2..in server");
-				callback.accept("Player " + playerNum + " is connected!");
+				
+				callback.accept((Serializable) ("Player " + playerNum + " is connected!"));
+				
+				out.writeObject("-pn");
+				out.writeObject(playerNum);
+				
 				out.writeObject("You are now connected!");
-				System.out.println("here..3..in server");
-				out.writeObject((Serializable) "-pn");
-				out.writeObject((Serializable)playerNum);
-				System.out.println("here..5..in server");
+				
+				out.writeObject("Waiting for other players to connect!");
+				out.writeObject("Once all players are connected, then game window will open");
+				
+				if(playerNum == 4) {
+					startGameWindow();
+					dealHand();
+				}
+
 				while(true) {
 					Serializable data = (Serializable) in.readObject();
 					callback.accept(data);

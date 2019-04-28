@@ -50,10 +50,16 @@ public class Player {
 				while(true) {
 					Serializable data = (Serializable) in.readObject();
 					if(data.toString().equals("-pn")) {
-						System.out.println("here in if client");
 						Serializable data1 = (Serializable) in.readObject();
 						Platform.runLater(() -> { PlayerFX.mainStage.setTitle("Player " + data1.toString()); });
-					}else {
+					}
+					else if(data.toString().equals("-sgw")) {
+						Platform.runLater(() -> { PlayerFX.GameWindow();});
+					}
+					else if(data.toString().equals("-gh")) {
+						hand = (ArrayList<Card>) in.readObject();
+					}
+					else {
 						callback.accept(data);
 					}
 				}
