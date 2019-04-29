@@ -9,6 +9,7 @@ import javafx.geometry.Pos;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -24,7 +25,7 @@ public class ServerFX extends Application {
     Dealer dealer;
     Consumer<Serializable> callback;
 
-    TextField messages = new TextField();
+    TextArea messages = new TextArea();
 
     int totalCard1=0;
     int totalCard2=0;
@@ -37,7 +38,6 @@ public class ServerFX extends Application {
 
             BorderPane root = new BorderPane();
 
-            root.autosize();
 
             Text welcome = new Text("Welcome to CardStack Game Server!");
             welcome.setFill(Color.DARKRED);
@@ -67,7 +67,7 @@ public class ServerFX extends Application {
             root.setTop(welcomePrompt);
             root.setCenter(hb);
 
-            Scene scene = new Scene(root,550,200);
+            Scene scene = new Scene(root,450,200);
 
 
             primaryStage.setScene(scene);
@@ -100,9 +100,8 @@ public class ServerFX extends Application {
         stopButton.setOnAction(e->primaryStage.close());
 
 
-        //messaging box
-        messages.setPrefHeight(100);
-        messages.setPrefWidth(400);
+        VBox center = new VBox(10,messages,stopButton);
+        center.setAlignment(Pos.CENTER);
 
         Text player1stats = new Text("Player 1 Total Cards: " + Integer.toString(totalCard1));
         Text player2stats = new Text("Player 2 Total Cards: " + Integer.toString(totalCard2));
@@ -119,17 +118,13 @@ public class ServerFX extends Application {
         player3.setAlignment(Pos.CENTER);
         player4.setAlignment(Pos.CENTER);
 
+        root.setCenter(center);
         root.setTop(player1);
         root.setRight(player2);
         root.setBottom(player3);
         root.setLeft(player4);
 
-        BorderPane pane = new BorderPane();
-        pane.setTop(messages);
-        pane.setCenter(root);
-        pane.setBottom(stopButton);
-
-        Scene scene = new Scene(pane,550,200);
+        Scene scene = new Scene(root,500,400);
 
         primaryStage.setScene(scene);
         primaryStage.show();

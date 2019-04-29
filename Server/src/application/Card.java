@@ -15,4 +15,10 @@ public class Card {
         this.type = type;
         this.pic = new ImageView(pic);
     }
+
+    Card(String type,int rank){
+        this.rank = rank;
+        this.type = type;
+    }
+
 }
