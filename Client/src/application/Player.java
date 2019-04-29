@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.function.Consumer;
 
 import javafx.application.Platform;
+import javafx.scene.image.ImageView;
 
 public class Player {
     int playerNum;
@@ -16,7 +17,8 @@ public class Player {
     Consumer<Serializable> callback;
     playerThread player;
 
-    ArrayList<Card> hand = new ArrayList<Card>();
+    ArrayList<String> handType = new ArrayList<String>();
+    ArrayList<Integer> handRank = new ArrayList<Integer>();
 
     Player(int port, String ip,Consumer<Serializable> callback){
         this.port = port;
@@ -50,12 +52,34 @@ public class Player {
                 while(true) {
                     Serializable data = (Serializable) in.readObject();
                     if(data.toString().equals("-pn")) {
-                        System.out.println("here in if client");
                         Serializable data1 = (Serializable) in.readObject();
-                        Platform.runLater(() -> {
-                            PlayerFX.mainStage.setTitle("Player " + data1.toString());
+                        playerNum = Integer.parseInt(data1.toString());
+                        Platform.runLater(() -> { PlayerFX.mainStage.setTitle("Player " + playerNum); });
+                    }
+                    else if(data.toString().equals("-sgw")) {
+                        Platform.runLater(() -> { PlayerFX.GameWindow();});
+                    }
+                    else if(data.toString().equals("-gh")) {
+                        handRank = (ArrayList<Integer>) in.readObject();
+                        handType = (ArrayList<String>) in.readObject();
+                    }else if(data.toString().equals("-pw")){
+                        Serializable data1 = (Serializable) in.readObject();
+                        Serializable url = (Serializable) in.readObject();
+                        callback.accept(data1.toString());
+                        Platform.runLater(() -> { PlayerFX.stack.getChildren().clear();
+                        ImageView pic = new ImageView(url.toString());
+                        pic.setFitWidth(55);
+                        pic.setFitHeight(75);
+                        pic.setPreserveRatio(true);
+                        PlayerFX.stack.getChildren().add(pic);
                         });
-                    }else {
+                    }else if(data.toString().equals("-tts")){
+                        Serializable data1 = (Serializable) in.readObject();
+                        System.out.println(data1.toString()+"........here");
+                        PlayerFX.takeTurn(Integer.parseInt(data1.toString()));
+                        System.out.println(data1.toString()+"here....");
+                    }
+                    else {
                         callback.accept(data);
                     }
                 }
