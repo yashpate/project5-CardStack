@@ -89,6 +89,20 @@ public class PlayerFX extends Application {
     }
     static HBox stack = new HBox();
 
+    public static void gameOver(String msg) {
+    	BorderPane root = new BorderPane();
+    	
+    	Text welcome = new Text(msg);
+        welcome.setFill(Color.DARKRED);
+        welcome.setFont(new Font(25));
+        welcome.setTextAlignment(TextAlignment.CENTER);
+    	
+        root.setCenter(welcome);
+        
+    	Scene scene = new Scene(root,500,250);
+        mainStage.setScene(scene);
+        mainStage.show();
+    }
     public static void gameFunction(){
         stack.getChildren().clear();
         System.out.println(p.handRank.size() + " " + p.handType.size());

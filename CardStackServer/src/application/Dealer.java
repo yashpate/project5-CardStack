@@ -376,7 +376,7 @@ int count = 0;
                     	if(data2.toString().equals("0")) {
 	                    	for(int i = 0; i < 4; i++) {
 	                    		if(playerList.get(i).score > score) {
-	                    			score = playerList.get(0).score;
+	                    			score = playerList.get(i).score;
 	                    			winner = i+1;
 	                    		}
 	                    	}
@@ -392,21 +392,24 @@ int count = 0;
                         callback.accept(data);
                     }
                     
+//                    for(int i = 0; i < 4; i++) {
+//                    	if(playerList.get(i).isAlive()==false) {
+//                    		int k = i+1;
+//                    		callback.accept("Player " + k + " left the game!");
+//                    		for(int j = 0; j < 4; j++) {
+//	                    		if( j!=i) {
+//	                    			playerList.get(j).out.writeObject("-winner");
+//	                    			playerList.get(j).out.writeObject("Player " + k + " left the game!");
+//	                    		}
+//                    		}
+//                    		break;
+//                    	}
+//                    }
+                    
                 }
                 
             }
             catch(Exception e) {
-            	System.out.println("Connection Closed");
-            	for(int i = 0; i < 4; i++) {
-            		if(i != playerNum) {
-            			try {
-							playerList.get(i).out.writeObject("Player " + playerNum + " left the game! Game Over!!!");
-						} catch (IOException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-            		}
-            	}
                 callback.accept("Client Thread Closed!");
             }
         }

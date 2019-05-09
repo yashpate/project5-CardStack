@@ -92,7 +92,7 @@ public class Player {
                         System.out.println(data1.toString()+"here....");
                     }else if(data.toString().equals("-winner")) {
                     	Serializable data1 = (Serializable) in.readObject();
-                    	callback.accept(data1);
+                    	Platform.runLater(() -> PlayerFX.gameOver(data1.toString()));
                     }
                     else {
                         callback.accept(data);
